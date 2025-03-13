@@ -17,7 +17,8 @@ PROTECTED_ROUTES = ["/alert-matching/"]  # Chỉ áp dụng auth cho các route 
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        if request.url.path in PROTECTED_ROUTES:
+        path = request.url.path.rstrip("/")
+        if path in PROTECTED_ROUTES:
             api_key = request.headers.get(API_KEY_NAME)
             if api_key != API_KEY:
                 return JSONResponse(
